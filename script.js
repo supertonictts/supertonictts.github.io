@@ -718,13 +718,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Modal Dialog Functionality
     const modal = document.getElementById('arxiv-modal');
-    const arxivButton = document.getElementById('arxiv-button');
     const closeModal = document.querySelector('.close-modal');
-
-    arxivButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        modal.style.display = 'block';
-    });
 
     closeModal.addEventListener('click', function() {
         modal.style.display = 'none';
@@ -764,14 +758,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 'event_category': 'navigation',
                 'event_label': `${section}_${tabName}`
             });
-        });
-    });
-
-    // Paper link click tracking
-    document.querySelector('.paper-button').addEventListener('click', function() {
-        gtag('event', 'paper_link_click', {
-            'event_category': 'engagement',
-            'event_label': 'paper_link'
         });
     });
 
