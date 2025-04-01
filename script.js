@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Remove loading state immediately
+    document.body.classList.add('loaded');
+    
     // Update copyright year
     document.getElementById('current-year').textContent = new Date().getFullYear();
     
@@ -522,11 +525,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     setupAudioComparison();
     
-    // Add a loader animation while page is loading
-    window.addEventListener('load', function() {
-        document.body.classList.add('loaded');
-    });
-    
     // Pop bubble function to reuse
     function popBubble(bubble) {
         if (bubble.classList.contains('popping')) {
@@ -824,4 +822,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('section[id]').forEach(section => {
         sectionObserver.observe(section);
     });
-}); 
+});
+
+// Fallback for Safari
+if (document.readyState === 'complete') {
+    document.body.classList.add('loaded');
+} 
