@@ -735,4 +735,107 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none';
         }
     });
+
+    // Audio play tracking
+    document.querySelectorAll('audio').forEach(audioElement => {
+        audioElement.addEventListener('play', function() {
+            const audioItem = this.closest('.audio-item');
+            if (audioItem) {
+                const modelName = audioItem.closest('section').id;
+                const audioType = audioItem.querySelector('h4').textContent.trim();
+                
+                // Track audio play event
+                gtag('event', 'audio_play', {
+                    'event_category': 'audio_interaction',
+                    'event_label': `${modelName}_${audioType}`
+                });
+            }
+        });
+    });
+
+    // Tab switching tracking
+    document.querySelectorAll('.sample-tab, .step-sample-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const section = this.closest('section').id;
+            const tabName = this.textContent.trim();
+            
+            // Track tab switch event
+            gtag('event', 'tab_switch', {
+                'event_category': 'navigation',
+                'event_label': `${section}_${tabName}`
+            });
+        });
+    });
+
+    // Paper link click tracking
+    document.querySelector('.paper-button').addEventListener('click', function() {
+        gtag('event', 'paper_link_click', {
+            'event_category': 'engagement',
+            'event_label': 'paper_link'
+        });
+    });
+
+    // Author link click tracking
+    document.querySelectorAll('.author-name a').forEach(link => {
+        link.addEventListener('click', function() {
+            const authorName = this.textContent.trim();
+            gtag('event', 'author_link_click', {
+                'event_category': 'engagement',
+                'event_label': authorName
+            });
+        });
+    });
+
+    // Scroll depth tracking
+    let maxScroll = 0;
+    window.addEventListener('scroll', function() {
+        const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+        if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+            if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+                gtag('event', 'scroll_depth', {
+                    'event_category': 'engagement',
+                    'event_label': `${maxScroll}%`
+                });
+            }
+        }
+    });
+
+    // Time spent tracking
+    let startTime = new Date().getTime();
+    window.addEventListener('beforeunload', function() {
+        const timeSpent = Math.round((new Date().getTime() - startTime) / 1000);
+        gtag('event', 'time_spent', {
+            'event_category': 'engagement',
+            'event_label': `${timeSpent} seconds`
+        });
+    });
+
+    // Model comparison table interaction tracking
+    document.querySelectorAll('.model-comparison-table tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            const modelName = this.querySelector('td:first-child').textContent.trim();
+            gtag('event', 'model_hover', {
+                'event_category': 'interaction',
+                'event_label': modelName
+            });
+        });
+    });
+
+    // Section visibility tracking
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                gtag('event', 'section_view', {
+                    'event_category': 'visibility',
+                    'event_label': entry.target.id
+                });
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('section[id]').forEach(section => {
+        sectionObserver.observe(section);
+    });
 }); 
