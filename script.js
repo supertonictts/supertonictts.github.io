@@ -2,63 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Remove loading state immediately
     document.body.classList.add('loaded');
     
-    // 오디오 요소 사전 로딩 함수 추가
-    function preloadAudioElements() {
-        console.log('Preloading audio elements...');
-        const audioElements = document.querySelectorAll('audio');
-        
-        // 모든 오디오 요소를 즉시 로드
-        audioElements.forEach(audio => {
-            // 오디오 요소 로드 시작
-            if (audio.getAttribute('src')) {
-                // preload 속성 설정
-                audio.setAttribute('preload', 'auto');
-                
-                // 로드 성공 표시
-                audio.addEventListener('loadeddata', function() {
-                    // 오디오가 로드됨
-                    const audioItem = audio.closest('.audio-item');
-                    if (audioItem) {
-                        audioItem.classList.add('loaded');
-                    }
-                });
-                
-                // 로드 실패 시 오류 처리
-                audio.addEventListener('error', function() {
-                    console.error('Error loading audio:', audio.getAttribute('src'));
-                });
-                
-                // 강제 로드 시도
-                const forceLoad = () => {
-                    try {
-                        // 오디오 미리 로드를 위한 추가 작업
-                        if (audio.load) {
-                            audio.load();
-                        }
-                    } catch (e) {
-                        console.error('Audio preload error:', e);
-                    }
-                };
-                
-                // 즉시 로드 시도
-                forceLoad();
-                
-                // 약간의 지연 후 다시 시도 (일부 브라우저에서 필요할 수 있음)
-                setTimeout(forceLoad, 100);
-            }
-        });
-    }
-    
-    // 모든 audio-container에 대해 visible 클래스 추가
-    function showAllAudioContainers() {
-        const containers = document.querySelectorAll('.audio-container');
-        containers.forEach(container => {
-            // 컨테이너 렌더링을 위한 스타일 적용
-            container.style.visibility = 'visible';
-            container.style.opacity = '1';
-        });
-    }
-    
     // Update copyright year
     document.getElementById('current-year').textContent = new Date().getFullYear();
     
@@ -282,16 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                 }
-                
-                // 스크롤 후 컨테이너 내의 모든 오디오 요소 다시 로드 시도
-                setTimeout(() => {
-                    const audioElements = container.querySelectorAll('audio');
-                    audioElements.forEach(audio => {
-                        if (audio.load) {
-                            audio.load();
-                        }
-                    });
-                }, 300);
             });
         });
         
@@ -889,10 +822,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('section[id]').forEach(section => {
         sectionObserver.observe(section);
     });
-
-    // 페이지 로드 후 오디오 요소 사전 로드
-    preloadAudioElements();
-    showAllAudioContainers();
 });
 
 // Fallback for Safari
