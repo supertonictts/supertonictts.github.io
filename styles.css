@@ -240,8 +240,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container {
-    width: 92%;
-    max-width: 1200px;
+    width: 96%;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 0 15px;
 }
@@ -1049,9 +1049,14 @@ p {
     margin: 0 -0.5rem;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     gap: 1rem;
+    will-change: transform;
+    contain: content;
+    transform: translateZ(0);
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .audio-container::-webkit-scrollbar {
@@ -1160,6 +1165,8 @@ p {
     flex: 0 0 300px;
     scroll-snap-align: start;
     max-width: 350px; /* Limit maximum width */
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* Playing state for audio items */
@@ -1242,6 +1249,10 @@ audio {
     margin: 0.8rem 0;
     border-radius: 30px;
     height: 40px;
+    contain: layout size style;
+    will-change: contents;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 audio::-webkit-media-controls-panel {
@@ -2389,4 +2400,27 @@ body.loaded::after {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* 로드된 오디오 아이템 스타일 */
+.audio-item.loaded {
+    opacity: 1;
+}
+
+/* 모든 오디오 아이템을 기본적으로 완전히 표시 */
+.audio-item {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 0.5rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+    max-width: 350px; /* Limit maximum width */
+    opacity: 1 !important;
+    visibility: visible !important;
 } 
